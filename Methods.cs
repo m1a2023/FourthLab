@@ -2,10 +2,6 @@
 
 class RPN
 {
-
-
-
-
 	public static List<string> RewriteToRPN(string input)
 	{
 
@@ -65,24 +61,48 @@ class RPN
                     output.Add(stack.Pop().ToString());
                 }
 
-                if (stack.Count == 0 || stack.Peek() == "(")
-                    throw new Exception("ERROR");
-
                 stack.Pop();
             }
 
-            while (stack.Count > 0)
-            {
-                output.Add(stack.Pop());
-            }
+        }
+        while (stack.Count > 0)
+        {
+            output.Add(stack.Pop());
         }
 
         return output;
     }
 
-    public double CalculateRPN(List<string> input)
+    public static double CalculateRPN(List<string> tokens)
     {
+        Stack<double> stack = new Stack<double>();
 
+        foreach (string token in tokens)
+        {
+            if (double.TryParse(token, out double number))
+                stack.Push(number);
+            
+            else if (IsOperator(token))
+            {
+                double firstOperand = stack.Pop();
+                double secondOperand = stack.Pop();
+                double result = PerformOperation(token[0], firstOperand, secondOperand);
+
+                stack.Push(result);
+            }
+        }
+        return stack.Pop();
+    }
+
+    static double PerformOperation(char Operator, double fOperand, double sOperand)
+    {
+        return Operator switch
+        {
+            '*' => fOperand * sOperand,
+            '/' => fOperand / sOperand,
+            '+' => fOperand + sOperand,
+            '-' => fOperand - sOperand,
+        };
     }
 
     static bool IsNumber(string input)

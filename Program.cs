@@ -6,14 +6,10 @@ class Program
     {
         string input = Console.ReadLine();
 
-        List<string> output = new List<string>();
-        output = RPN.RewriteToRPN(input);
+        List<string> reversePolishNotation = new List<string>();
+        reversePolishNotation = RPN.RewriteToRPN(input);
+        double result = RPN.CalculateRPN(reversePolishNotation);
+        Console.WriteLine(result);
 
-        Console.WriteLine(output);
-
-        foreach (string  element in  output)
-        {
-            Console.WriteLine(element);
-        }
     }
 }
